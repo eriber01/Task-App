@@ -1,0 +1,176 @@
+.container-task{
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+.form-task-data{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    margin-top: 1rem;
+    width: 100%;
+
+    border-right: solid 1px black;
+}
+
+.form-add-task{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    text-align: center;
+
+    align-items: center;
+    width: 90%;
+    height: 60vh;
+    margin-top: 1rem;
+    border: solid 1px black;
+    border-radius: 5px;
+
+}
+
+.form-add-task input, textarea{
+    width: 80%;
+    border: none;
+    outline: none;
+    resize: none;
+    border-bottom: solid grey 1px;
+}
+
+.form-add-task textarea{
+    height: 40%;
+}
+
+.form-add-task button{
+    border: none;
+    background-color: rgba(0, 0, 255, 0.466);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 350ms ease;
+}
+
+.form-add-task button:hover{
+    background-color: blue;
+    box-shadow: rgba(0, 0, 0, 0.479) 1px 1px 5px 1px;
+}
+
+.error-container{
+    height: 12%;
+    width: 80%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 0, 0, 0.658);
+    border-radius: 5px;
+}
+
+.success-container{
+    height: 12%;
+    width: 80%;
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #18e97d;
+    border-radius: 5px;
+}
+
+.task-edit{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+    margin: 1rem;
+}
+
+.task-edit h3{
+    text-align: center;
+}
+
+.task{
+    margin-top: 1rem;
+    border-radius: 5px;
+    border: solid 1px black;
+    padding: 0.8rem;
+
+
+    display: flex;
+    flex-direction: column;
+}
+
+.task span{
+    border-bottom: solid 1px rgb(121, 118, 118);
+}
+
+.task p{
+    margin-top: 3%;
+}
+
+.task button{
+    float: right;
+}
+
+.btn-editar, .btn-borrar{
+    border: none;
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+
+    transition: all 350ms ease;
+}
+
+.btn-borrar{
+    background-color: rgba(255, 0, 0, 0.582);
+}
+
+.btn-borrar:hover{
+    box-shadow: rgba(0, 0, 0, 0.479) 1px 1px 5px 1px;
+    background-color: #FF2626;
+}
+
+.btn-editar{
+    background-color: rgba(0, 0, 255, 0.466);
+}
+
+.btn-editar:hover{
+    box-shadow: rgba(0, 0, 0, 0.479) 1px 1px 5px 1px;
+    background-color: blue;
+}
+
+/* resposive desing */
+
+@media (max-width: 720px){
+    .container-task {
+        flex-direction: column;
+    }
+
+    .form-task-data{
+        border: none;
+    }
+
+    .task-edit{
+        width: auto;
+    }
+
+    .error-container{
+        height: 8vh;
+    }
+
+    .success-container{
+        height: 8vh;
+    }
+
+    *{
+        font-size: 1rem;
+    }
+
+    h3{
+        font-size: 2rem;
+    }
+}
