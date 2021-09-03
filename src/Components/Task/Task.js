@@ -2,13 +2,17 @@ import {useState, useEffect} from 'react'
 import { FirebaseStorage } from '../../Services/FirebaseConfig'
 import './Task.css'
 
+//importando los servicios para las Tareas y la validacion
 import GetTask from '../../Services/GetTask'
 import DeleteTask from '../../Services/DeleteTask'
 import UpdateTask from '../../Services/UpdateTask'
 import SetUpdateTask from '../../Services/SetUpdateTask'
+import FormDataValidation from '../../Services/FormDataValidation'
+import SendFirebaseTask from '../../Services/SendFirebaseTask'
+
 
 export default function Task() {
-    //states
+    //estados de las tareas
     const [ListTask, setListTask] = useState([])
 
     const [addTask, setaddTask] = useState([{
@@ -16,11 +20,13 @@ export default function Task() {
         taskDescription: ''
     }])
 
+    //estados de los diferentes mensajes
     const [MessageError, setMessageError] = useState(null)
     const [MessageSuccess, setMessageSuccess] = useState(null)
 
     const [ModoEdicion, setModoEdicion] = useState(null)
 
+    //cargar las tareas cuando se ejecuta la pagina
     useEffect(()=>{
         GetTask()
             .then(TaskData =>{
@@ -28,6 +34,7 @@ export default function Task() {
             })
     },[])
 
+    //maneja el tiempo que duran los mensajes
     const TimeMessage = ()=>{
         setTimeout(() => {
             setMessageSuccess(null)
@@ -35,62 +42,67 @@ export default function Task() {
         }, 2500);
     }
 
+    //llama a la funcion que valida los datos de form
+    // y envias los datos de los imput para guardarlos en firebase
     const SendTask = async (eve)=>{
         eve.preventDefault()
-        
-        if(!addTask.taskName.trim()){
-            setMessageError('Debe introducir un nombre para la tarea')
-            setMessageSuccess(null)
-            setaddTask({...addTask, taskName: ''})
 
-            TimeMessage()
-
-        }else if(!addTask.taskDescription.trim()){
-            setMessageError('Debe introducir una descripcion de la tarea')
-            setaddTask({...addTask, taskDescription:''})
-            setMessageSuccess(null)
-
-            TimeMessage()
-
-        }   else{
-            const newTask = {
-                TaskName: addTask.taskName,
-                TaskDescription: addTask.taskDescription
-            }
-
-            await FirebaseStorage.collection('Task').add(newTask)
-            
-            setaddTask({...addTask, taskName: '', taskDescription: ''})
-            setMessageError(null)
-            setMessageSuccess('La tarea se Agrego con Exito')
-
-            TimeMessage()
-            GetTask()
-                .then(TaskData =>{
-                    setListTask(TaskData)
-                })
+        //objeto con los datos para la validacion
+        const ValData = {
+            imput1: addTask.taskName,
+            imput2: addTask.taskDescription
         }
+        //funcion que valida los datos
+        await FormDataValidation(ValData, 'task')
+            .then((ResValidation) =>{
+                //valida si la respuesta de la validacion es correcta
+                if (ResValidation.statusValidation === false) {
+                    setMessageError(ResValidation.mesValidation)
+
+                    //valida cual de los imput debe limpiarse
+                    if (ResValidation.campo === 1) {
+                        setaddTask({...addTask, taskName: ''})
+                        
+                    }else if (ResValidation.campo === 2) {
+                        setaddTask({...addTask, taskDescription: ''})
+                    }
+
+                    setMessageSuccess(null)
+                    TimeMessage()
+                }else{
+                    //funcion que guarda los datos 
+                    SendFirebaseTask(addTask)
+
+                    setaddTask({...addTask, taskName: '', taskDescription: ''})
+                    setMessageError(null)
+
+                    setMessageSuccess('La tarea se Agrego con Exito')
+
+                    TimeMessage()
+                    //carga todos datos de firebase y los agrega al
+                    GetTask()
+                        .then(TaskData =>{
+                            setListTask(TaskData)
+                        })
+                }
+            })
     }
 
 
     const Delete = async (item)=>{
         
-        try {
-            await DeleteTask(item)
+        await DeleteTask(item)
 
-            GetTask()
-                .then(TaskData =>{
-                    setListTask(TaskData)
-                })
-            
-            setMessageSuccess('Se a Borrado la Tarea con existo')
+        GetTask()
+            .then(TaskData =>{
+                setListTask(TaskData)
+            })
+        
+        setMessageSuccess('Se a Borrado la Tarea con existo')
 
-            setaddTask({...addTask, taskName: '', taskDescription: ''})
-            setModoEdicion(null)
-            TimeMessage()
-        } catch (error) {
-            
-        }
+        setaddTask({...addTask, taskName: '', taskDescription: ''})
+        setModoEdicion(null)
+        TimeMessage()
     }
 
     const Update = async(item)=>{
@@ -103,10 +115,40 @@ export default function Task() {
         setModoEdicion('Activo')
     }
 
-    const SetUpdate = (eve)=>{
+    const SetUpdate = async (eve)=>{
         eve.preventDefault()
+        const id = ListTask[0].id
         
-        SetUpdateTask(ListTask)
+        await FormDataValidation(addTask)
+        .then((ResValidation) =>{
+            //valida si la respuesta de la validacion es correcta
+            if (ResValidation.statusValidation === false) {
+                setMessageError(ResValidation.mesValidation)
+                //valida cual de los imput debe limpiarse
+                if (ResValidation.campo === 1) {
+                    setaddTask({...addTask, taskName: ''})
+                }else if (ResValidation.campo === 2) {
+                    setaddTask({...addTask, taskDescription: ''})
+                }
+
+                setMessageSuccess(null)
+                TimeMessage()
+            }else   {
+                SetUpdateTask(addTask, id)
+                    .then(
+                        GetTask()
+                            .then(TaskData =>{
+                        setListTask(TaskData)
+                    }),
+                    
+                    setaddTask({...addTask, taskName: '', taskDescription: ''}),
+                    setModoEdicion(null),
+                    setMessageSuccess('Se a Actualizado la Tarea'),
+                    TimeMessage()
+
+                )
+            }
+        })
     }
 
     return (

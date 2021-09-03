@@ -1,9 +1,13 @@
 import { FirebaseStorage } from "./FirebaseConfig";
 
-const SetUpdateTask = (TaskData) =>{
+const SetUpdateTask = async (TaskData, id) =>{
 
+    const Data = {
+        TaskName: TaskData.taskName,
+        TaskDescription: TaskData.taskDescription
+    }
 
-    return console.log(TaskData[0].TaskName);
+    await FirebaseStorage.collection('Task').doc(id).set(Data)
 }
 
 export default SetUpdateTask;
