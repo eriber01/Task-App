@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import { FirebaseStorage } from '../../Services/FirebaseConfig'
+//import { FirebaseStorage } from '../../Services/FirebaseConfig'
 import './Task.css'
 
 //importando los servicios para las Tareas y la validacion
@@ -53,7 +53,7 @@ export default function Task() {
             imput2: addTask.taskDescription
         }
         //funcion que valida los datos
-        await FormDataValidation(ValData, 'task')
+        await FormDataValidation(ValData, 'Task')
             .then((ResValidation) =>{
                 //valida si la respuesta de la validacion es correcta
                 if (ResValidation.statusValidation === false) {
@@ -62,7 +62,7 @@ export default function Task() {
                     //valida cual de los imput debe limpiarse
                     if (ResValidation.campo === 1) {
                         setaddTask({...addTask, taskName: ''})
-                        
+
                     }else if (ResValidation.campo === 2) {
                         setaddTask({...addTask, taskDescription: ''})
                     }
