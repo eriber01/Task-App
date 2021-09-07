@@ -3,18 +3,23 @@ import FormDataValidation from '../../Services/FormDataValidation'
 
 export default function Authenticate() {
 
-    const ValData = {
-        imput1: 'eriber',
-        imput2: ' '
-    }
-    
-    const enviar = ()=>{
-        FormDataValidation(ValData, 'Login')
-    }
 
     return (
         <div>
-            <button onClick={enviar}>adssdf</button>
+            <h1>Registro</h1>
+
+            <form action="">
+                <input type="email" name="" id="" 
+                    placeholder='Ingrese Su Email'
+                    value=''
+                />
+                <input type="password" name="" id="" 
+                    placeholder='Ingrese Su Pass'
+                    value=''
+                />
+
+                <button>Registrarse</button>
+            </form>
         </div>
     )
 }

@@ -14,7 +14,7 @@ import SendFirebaseTask from '../../Services/SendFirebaseTask'
 export default function Task() {
     //estados de las tareas
     const [ListTask, setListTask] = useState([])
-
+    const [IdTask, setIdTask] = useState([])
     const [addTask, setaddTask] = useState([{
         taskName: '',
         taskDescription: ''
@@ -106,6 +106,7 @@ export default function Task() {
     }
 
     const Update = async(item)=>{
+        setIdTask(item)
         await UpdateTask(item)
                 .then(TaskData =>{
                     setaddTask({...addTask, taskName: TaskData.Name, 
@@ -117,10 +118,15 @@ export default function Task() {
 
     const SetUpdate = async (eve)=>{
         eve.preventDefault()
-        const id = ListTask[0].id
         
-        await FormDataValidation(addTask)
+        const ValData = {
+            imput1: addTask.taskName,
+            imput2: addTask.taskDescription
+        }
+        
+        await FormDataValidation(ValData, 'Task')
         .then((ResValidation) =>{
+            
             //valida si la respuesta de la validacion es correcta
             if (ResValidation.statusValidation === false) {
                 setMessageError(ResValidation.mesValidation)
@@ -134,7 +140,7 @@ export default function Task() {
                 setMessageSuccess(null)
                 TimeMessage()
             }else   {
-                SetUpdateTask(addTask, id)
+                SetUpdateTask(addTask, IdTask)
                     .then(
                         GetTask()
                             .then(TaskData =>{
