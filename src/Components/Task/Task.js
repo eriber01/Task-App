@@ -49,8 +49,8 @@ export default function Task() {
 
         //objeto con los datos para la validacion
         const ValData = {
-            imput1: addTask.taskName,
-            imput2: addTask.taskDescription
+            input1: addTask.taskName,
+            input2: addTask.taskDescription
         }
         //funcion que valida los datos
         await FormDataValidation(ValData, 'Task')

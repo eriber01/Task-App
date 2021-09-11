@@ -7,12 +7,12 @@ const FormDataValidation = async (FormData, action)=>{
     }
 
     const Data = await {
-        imput1: FormData.imput1,
-        imput2: FormData.imput2
+        input1: FormData.input1,
+        input2: FormData.input2
     }
 
     if (action === 'Task') {
-        if (!Data.imput1.trim()) {
+        if (!Data.input1.trim()) {
             ResValidation = {
                 mesValidation: 'Debe introducir un nombre para la tarea',
                 statusValidation: false,
@@ -20,7 +20,7 @@ const FormDataValidation = async (FormData, action)=>{
             }
             return ResValidation
     
-        }else if(!Data.imput2.trim()){
+        }else if(!Data.input2.trim()){
             ResValidation = {
                 mesValidation: 'Debe introducir una descripcion para la tarea',
                 statusValidation: false,
@@ -36,7 +36,30 @@ const FormDataValidation = async (FormData, action)=>{
             return ResValidation
         }
     }else if(action === 'Login'){
-        return console.log('login');
+
+        if (!Data.input1.trim()) {
+            ResValidation = {
+                mesValidation: 'Debe introducir un Email',
+                statusValidation: false,
+                campo: 1
+            }
+            return ResValidation
+    
+        }else if(!Data.input2.trim()){
+            ResValidation = {
+                mesValidation: 'Debe introducir un Pass',
+                statusValidation: false,
+                campo: 2
+            }
+    
+            return ResValidation
+        }else{
+            ResValidation = {
+                mesValidation: 'La tarea se Agrego con Exito',
+                statusValidation: true
+            }
+            return ResValidation
+        }
     }
 }
 

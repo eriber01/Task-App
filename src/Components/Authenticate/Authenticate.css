@@ -1,0 +1,118 @@
+.container{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.form-container{
+    width: 70%;
+    height: 50vh;
+    background-color: gray;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-container h1{
+    margin: 2rem;
+    color: white;
+    text-decoration: underline;
+    font-size: 2rem;
+}
+
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    width: 60%;
+    height: 100%;
+}
+
+.email , .pass{
+    width: 100%;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 8px;
+    margin-bottom: 1rem;
+    border-bottom: solid rgb(170, 159, 159) 1px;
+}
+
+.email::placeholder, .pass::placeholder{
+    color: rgba(255, 255, 255, 0.671);
+}
+
+.btn-login{
+    border: none;
+    background-color: rgba(0, 0, 0, 0.5);
+    width: 50%;
+    margin-top: 3rem;
+    padding: 0.8rem;
+    text-align: center;
+    cursor: pointer;
+    color: white;
+    border-radius: 5px;
+    transition: all 350ms ease;
+}
+
+.btn-login:hover{
+    background-color: rgba(0, 0, 0, 0.801);
+    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.438);
+}
+
+.login-change{
+    margin-bottom: 1rem;
+    color: white;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0);
+    transition: all 350ms ease;
+    cursor: pointer;
+}
+
+.login-change:hover{
+    border-bottom: 1px solid rgb(199, 194, 194);
+}
+
+.error-message{
+    background-color: #ff0000ab;
+    color: white;
+    padding: 1rem 5rem;
+    margin: 1.2rem;
+
+    border-radius: 5px;
+}
+
+.success-message{
+    background-color: #3fca60;
+    color: white;
+    padding: 1rem 5rem;
+    margin: 1.2rem;
+
+    border-radius: 5px;
+}
+/* Responsive dicing */
+
+@media (max-width: 600px) {
+    .btn-login{
+        width: auto;
+    }
+}
+
+@media (min-width: 800px) {
+    .form-container{
+        width: 40%;
+    }
+}
