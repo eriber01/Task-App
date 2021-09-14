@@ -10,6 +10,11 @@ import SetUpdateTask from '../../Services/SetUpdateTask'
 import FormDataValidation from '../../Services/FormDataValidation'
 import SendFirebaseTask from '../../Services/SendFirebaseTask'
 
+//valida la authentication
+import { auth } from '../../Services/FirebaseConfig'
+
+//pagina 404
+import NoLoginPage from '../NoLoginPage/NoLoginPage'
 
 export default function Task() {
     //estados de las tareas
@@ -26,12 +31,23 @@ export default function Task() {
 
     const [ModoEdicion, setModoEdicion] = useState(null)
 
+    const [SessionState, setSessionState] = useState(null)
     //cargar las tareas cuando se ejecuta la pagina
     useEffect(()=>{
         GetTask()
             .then(TaskData =>{
                 setListTask(TaskData)
             })
+
+        auth.onAuthStateChanged((user)=>{
+            if(user){
+                setSessionState('login')
+                //console.log('esta loqueado');
+            }else{
+                setSessionState(null)
+                //console.log('no esta loqueado');
+            }
+        })
     },[])
 
     //maneja el tiempo que duran los mensajes
@@ -158,91 +174,103 @@ export default function Task() {
     }
 
     return (
-        <div className='container-task'>
-            <div className='form-task-data'>
-                <h3>Agrega la Tarea Aqui</h3>
+        <div>
+            {   SessionState ? 
+                (
+                    <div className='container-task'>
+                        <div className='form-task-data'>
+                            <h3>Agrega la Tarea Aqui</h3>
 
-                <form onSubmit={ModoEdicion ? SetUpdate : SendTask} className='form-add-task'>
-                    <input required={true} onChange={(eve)=>
-                        setaddTask({...addTask, taskName: eve.target.value})} 
-                        type='text' 
-                        placeholder='Nombre de la tarea'
-                        value={addTask.taskName}
-                    />
+                            <form onSubmit={ModoEdicion ? SetUpdate : SendTask} className='form-add-task'>
+                                <input required={true} onChange={(eve)=>
+                                    setaddTask({...addTask, taskName: eve.target.value})} 
+                                    type='text' 
+                                    placeholder='Nombre de la tarea'
+                                    value={addTask.taskName}
+                                />
 
-                    <textarea required={true} onChange={(eve)=>
-                        setaddTask({...addTask, taskDescription: eve.target.value})
-                        }
-                        placeholder='Descripcion de la tarea'
-                        value={addTask.taskDescription}
-                    />
-                    {
-                        ModoEdicion ?
-                        (
-                            <button>Actualizar</button>
-                        )
-                        :
-                        (
-                            <button>Agregar</button>
-                        )
-                    }
-                </form>
+                                <textarea required={true} onChange={(eve)=>
+                                    setaddTask({...addTask, taskDescription: eve.target.value})
+                                    }
+                                    placeholder='Descripcion de la tarea'
+                                    value={addTask.taskDescription}
+                                />
+                                {
+                                    ModoEdicion ?
+                                    (
+                                        <button>Actualizar</button>
+                                    )
+                                    :
+                                    (
+                                        <button>Agregar</button>
+                                    )
+                                }
+                            </form>
+                            
+                            {
+                                MessageError ?
+                                (
+                                    <div className='error-container'>
+                                        <p>
+                                            {MessageError}
+                                        </p>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <span></span>
+                                )
+                            }
+
+                            {
+                                MessageSuccess ? 
+                                (
+                                    <div className='success-container'>
+                                        <p>
+                                            {MessageSuccess}
+                                        </p>
+                                    </div>
+                                )
+                                :
+                                (
+                                    <span></span>
+                                )
+                            }
+
+                        </div>
+                        
+                        
+                        <div className='task-edit'>
+                            <h3>Tareas Agregadas</h3>
+                            
+                            {
+                                ListTask.map((item)=>(
+                                    <div key={item.id} className='task'>
+                                        <span>{item.TaskName}</span>
+                                        <p>{item.TaskDescription}</p>
                 
-                {
-                    MessageError ?
-                    (
-                        <div className='error-container'>
-                            <p>
-                                {MessageError}
-                            </p>
+                                        <div>
+                                            <button onClick={()=> Update(item.id)}
+                                                className='btn-editar'>Editar
+                                            </button>
+                                            
+                                            <button onClick={()=> Delete(item.id)}
+                                                className='btn-borrar'>Borrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                ))
+                            }
                         </div>
-                    )
-                    :
-                    (
-                        <span></span>
-                    )
-                }
 
-                {
-                    MessageSuccess ? 
-                    (
-                        <div className='success-container'>
-                            <p>
-                                {MessageSuccess}
-                            </p>
-                        </div>
-                    )
-                    :
-                    (
-                        <span></span>
-                    )
-                }
-
-            </div>
+                    </div>
+                )
+                :
+                (
+                    <NoLoginPage/>
+                )
             
-            
-            <div className='task-edit'>
-                <h3>Tareas Agregadas</h3>
-                
-                {
-                    ListTask.map((item)=>(
-                        <div key={item.id} className='task'>
-                            <span>{item.TaskName}</span>
-                            <p>{item.TaskDescription}</p>
-    
-                            <div>
-                                <button onClick={()=> Update(item.id)}
-                                    className='btn-editar'>Editar
-                                </button>
-                                
-                                <button onClick={()=> Delete(item.id)}
-                                    className='btn-borrar'>Borrar
-                                </button>
-                            </div>
-                        </div>
-                    ))
-                }
-            </div>
+            }
 
         </div>
     )

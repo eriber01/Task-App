@@ -12,10 +12,10 @@ export default function Header() {
         auth.onAuthStateChanged((user)=>{
             if(user){
                 setSessionState('login')
-                console.log('esta loqueado');
+                //console.log('esta loqueado');
             }else{
                 setSessionState(null)
-                console.log('no esta loqueado');
+                //console.log('no esta loqueado');
             }
         })
     }, [])
@@ -25,7 +25,7 @@ export default function Header() {
         setSessionState(null)
     }
 
-    
+
     return (
         <div>
             <nav className='nav'>
