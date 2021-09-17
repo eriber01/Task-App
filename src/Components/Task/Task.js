@@ -34,21 +34,21 @@ export default function Task() {
     const [SessionState, setSessionState] = useState(null)
     //cargar las tareas cuando se ejecuta la pagina
     useEffect(()=>{
-        GetTask()
-            .then(TaskData =>{
-                setListTask(TaskData)
-            })
-
-        auth.onAuthStateChanged((user)=>{
+        auth.onAuthStateChanged(async (user)=>{
             if(user){
-                setSessionState('login')
+                await setSessionState(user.email)
+                
+                GetTask(user.email)
+                    .then(TaskData =>{
+                    setListTask(TaskData)
+                })
                 //console.log('esta loqueado');
             }else{
                 setSessionState(null)
                 //console.log('no esta loqueado');
             }
         })
-    },[])
+    },[SessionState])
 
     //maneja el tiempo que duran los mensajes
     const TimeMessage = ()=>{
@@ -87,7 +87,7 @@ export default function Task() {
                     TimeMessage()
                 }else{
                     //funcion que guarda los datos 
-                    SendFirebaseTask(addTask)
+                    SendFirebaseTask(addTask, SessionState)
 
                     setaddTask({...addTask, taskName: '', taskDescription: ''})
                     setMessageError(null)
@@ -96,7 +96,7 @@ export default function Task() {
 
                     TimeMessage()
                     //carga todos datos de firebase y los agrega al
-                    GetTask()
+                    GetTask(SessionState)
                         .then(TaskData =>{
                             setListTask(TaskData)
                         })
@@ -107,9 +107,9 @@ export default function Task() {
 
     const Delete = async (item)=>{
         
-        await DeleteTask(item)
+        await DeleteTask(item, SessionState)
 
-        GetTask()
+        GetTask(SessionState)
             .then(TaskData =>{
                 setListTask(TaskData)
             })
@@ -123,7 +123,7 @@ export default function Task() {
 
     const Update = async(item)=>{
         setIdTask(item)
-        await UpdateTask(item)
+        await UpdateTask(item, SessionState)
                 .then(TaskData =>{
                     setaddTask({...addTask, taskName: TaskData.Name, 
                         taskDescription: TaskData.Descripcion})
@@ -136,8 +136,8 @@ export default function Task() {
         eve.preventDefault()
         
         const ValData = {
-            imput1: addTask.taskName,
-            imput2: addTask.taskDescription
+            input1: addTask.taskName,
+            input2: addTask.taskDescription
         }
         
         await FormDataValidation(ValData, 'Task')
@@ -156,9 +156,9 @@ export default function Task() {
                 setMessageSuccess(null)
                 TimeMessage()
             }else   {
-                SetUpdateTask(addTask, IdTask)
+                SetUpdateTask(addTask, IdTask, SessionState)
                     .then(
-                        GetTask()
+                        GetTask(SessionState)
                             .then(TaskData =>{
                         setListTask(TaskData)
                     }),

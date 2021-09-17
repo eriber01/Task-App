@@ -6,7 +6,7 @@ const FormDataValidation = async (FormData, action)=>{
         statusValidation: ''
     }
 
-    const Data = await {
+    const Data = {
         input1: FormData.input1,
         input2: FormData.input2
     }
@@ -55,7 +55,7 @@ const FormDataValidation = async (FormData, action)=>{
             return ResValidation
         }else{
             ResValidation = {
-                mesValidation: 'La tarea se Agrego con Exito',
+                mesValidation: 'La Autentifico con Exito',
                 statusValidation: true
             }
             return ResValidation

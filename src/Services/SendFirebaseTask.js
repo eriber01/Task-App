@@ -1,13 +1,13 @@
 import { FirebaseStorage } from "./FirebaseConfig";
 
-const SendFirebaseTask = async (TaskData) =>{
+const SendFirebaseTask = async (TaskData, UserCollection) =>{
 
     const Data = {
         TaskDescription: TaskData.taskDescription,
         TaskName: TaskData.taskName
     }
-
-    await FirebaseStorage.collection('Task').add(Data)
+    
+    await FirebaseStorage.collection(UserCollection).add(Data)
 }
 
 export default SendFirebaseTask

@@ -1,7 +1,9 @@
 import { FirebaseStorage } from "./FirebaseConfig"
 
-const GetTask = async ()=>{
-    const {docs} = await FirebaseStorage.collection('Task').get()
+const GetTask = async (UserCollection)=>{
+    //console.log(UserCollection + ' get data');
+    
+    const {docs} = await FirebaseStorage.collection(UserCollection).get()
     const TaskData = docs.map(item=>({id: item.id, ...item.data()}))
     
     return TaskData
