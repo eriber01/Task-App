@@ -1,0 +1,23 @@
+.home{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.home h1{
+    font-size: 2rem;
+    margin: 2rem;
+    background-color: rgba(0, 0, 0, 0.76);
+    color: white;
+    width: 30%;
+    border-radius: 5px;
+}
+
+
+.home li, p{
+    list-style: none;
+    font-size: 17px;
+    line-height: 2;
+}
